@@ -1741,11 +1741,12 @@ class HarborInput {
     document.addEventListener('pointerlockerror',()=>this.mode());
     can.addEventListener('contextmenu',e=>e.preventDefault());
     can.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){this.enableTouch();return;}if(!live())return;
-      if(e.button===0)this.held.add('fire');if(e.button===2)this.held.add('ads');this.mouseDrag=true;this.mx=e.clientX;this.my=e.clientY;
+      this.mouseDrag=true;this.mx=e.clientX;this.my=e.clientY;
       if(!this.locked){try{can.setPointerCapture(e.pointerId);}catch{}}});
     document.addEventListener('mousemove',e=>{if(!live())return;if(this.locked)this.rotate(e.movementX,e.movementY);
       else if(this.mouseDrag){this.rotate(e.clientX-this.mx,e.clientY-this.my);this.mx=e.clientX;this.my=e.clientY;}});
-    document.addEventListener('pointerup',e=>{if(e.pointerType==='touch')return;if(e.button===0)this.held.delete('fire');if(e.button===2)this.held.delete('ads');this.mouseDrag=!!e.buttons;});
+    can.addEventListener('mousedown',e=>{if(!live())return;if(e.button===0)this.held.add('fire');if(e.button===2)this.held.add('ads');});
+    document.addEventListener('mouseup',e=>{if(e.button===0)this.held.delete('fire');if(e.button===2)this.held.delete('ads');this.mouseDrag=!!e.buttons;});
     document.addEventListener('pointercancel',e=>{if(e.pointerType!=='touch'){this.mouseDrag=false;this.held.delete('fire');this.held.delete('ads');}});
     window.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')this.enableTouch();},{capture:true});
     const stick=document.getElementById('stick'),knob=stick.querySelector('i');
